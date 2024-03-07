@@ -35,6 +35,12 @@ class _TipBabaState extends State<TipBaba> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    final textStyle = theme.textTheme.titleMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontWeight: FontWeight.bold,
+      fontSize: 24,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -46,40 +52,30 @@ class _TipBabaState extends State<TipBaba> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 400,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.purple,
-                    borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.inversePrimary,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Amount per person',
+                    style: textStyle.copyWith(
+                        fontSize: theme.textTheme.headlineLarge!.fontSize),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Amount per person',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 32),
-                      ),
-                      Text(
-                        '₹ $amountPerPerson',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 24),
-                      ),
-                    ],
+                  Text(
+                    '₹ $amountPerPerson',
+                    style: textStyle,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
