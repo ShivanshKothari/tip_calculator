@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:tip_calculator/widgets/person_counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,13 +31,15 @@ class TipBaba extends StatefulWidget {
 
 class _TipBabaState extends State<TipBaba> {
   double _billAmount = 0;
+  double _tipAmount = 0;
+  double _tipFactor = 0;
   int _peopleCount = 1;
   double _amountPerPerson = 0;
 
   void incrementPeople() {
     setState(() {
       _peopleCount++;
-      _amountPerPerson = _billAmount / _peopleCount;
+      _amountPerPerson = _billAmount / _peopleCount + _tipAmount;
     });
   }
 
@@ -46,7 +47,7 @@ class _TipBabaState extends State<TipBaba> {
     setState(() {
       if (_peopleCount > 1) {
         _peopleCount--;
-        _amountPerPerson = _billAmount / _peopleCount;
+        _amountPerPerson = _billAmount / _peopleCount + _tipAmount;
       }
     });
   }
@@ -113,7 +114,8 @@ class _TipBabaState extends State<TipBaba> {
                     onChanged: (String value) {
                       setState(() {
                         _billAmount = double.parse(value);
-                        _amountPerPerson = _billAmount / _peopleCount;
+                        _amountPerPerson =
+                            _billAmount / _peopleCount + _tipAmount;
                       });
                     },
                     decoration: const InputDecoration(
@@ -122,37 +124,83 @@ class _TipBabaState extends State<TipBaba> {
                       labelText: 'Bill Amount',
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'People',
-                        style: textStyle.copyWith(
-                            color: Colors.black87, fontSize: 20),
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: decrementPeople,
-                              icon: const Icon(Icons.remove)),
-                          Text(
-                            '$_peopleCount',
-                            style: textStyle.copyWith(
-                                color: Colors.black87, fontSize: 20),
-                          ),
-                          IconButton(
-                              onPressed: incrementPeople,
-                              icon: const Icon(Icons.add)),
-                        ],
-                      )
-                    ],
-                  )
+                  PersonCounter(
+                    textStyle: textStyle,
+                    peopleCount: _peopleCount,
+                    onIncrement: incrementPeople,
+                    onDecrement: decrementPeople,
+                  ),
+                  TipCounter(
+                    textStyle: textStyle,
+                    tipAmount: _tipAmount,
+                    tipFactor: _tipFactor,
+                    onChanged: (double value) {
+                      setState(() {
+                        _tipFactor = value;
+                        _tipAmount = _billAmount * _tipFactor;
+                        _amountPerPerson =
+                            _billAmount / _peopleCount + _tipAmount;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class TipCounter extends StatelessWidget {
+  const TipCounter({
+    super.key,
+    required this.textStyle,
+    required double tipAmount,
+    required double tipFactor,
+    required this.onChanged,
+  })  : _tipAmount = tipAmount,
+        _tipFactor = tipFactor;
+
+  final TextStyle textStyle;
+  final double _tipAmount;
+  final double _tipFactor;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Tip',
+              style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+            ),
+            Text(
+              '₹ $_tipAmount',
+              style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Text('${(_tipFactor * 100).round()}%',
+                style: textStyle.copyWith(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black87,
+                    fontSize: 20)),
+            Slider(
+                value: _tipFactor,
+                divisions: 5,
+                min: 0,
+                max: 0.5,
+                onChanged: onChanged),
+          ],
+        ),
+      ],
     );
   }
 }
