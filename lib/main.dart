@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +31,25 @@ class TipBaba extends StatefulWidget {
 }
 
 class _TipBabaState extends State<TipBaba> {
-  double amountPerPerson = 10;
+  double _billAmount = 0;
+  int _peopleCount = 1;
+  double _amountPerPerson = 0;
+
+  void incrementPeople() {
+    setState(() {
+      _peopleCount++;
+      _amountPerPerson = _billAmount / _peopleCount;
+    });
+  }
+
+  void decrementPeople() {
+    setState(() {
+      if (_peopleCount > 1) {
+        _peopleCount--;
+        _amountPerPerson = _billAmount / _peopleCount;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +64,7 @@ class _TipBabaState extends State<TipBaba> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Tip baba'),
+            Text('Tip Baba'),
           ],
         ),
       ),
@@ -71,9 +89,64 @@ class _TipBabaState extends State<TipBaba> {
                         fontSize: theme.textTheme.headlineLarge!.fontSize),
                   ),
                   Text(
-                    '₹ $amountPerPerson',
+                    '₹ ${_amountPerPerson.toStringAsFixed(2)}',
                     style: textStyle,
                   ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  border: Border.all(
+                      color: theme.colorScheme.primary,
+                      style: BorderStyle.solid,
+                      width: 2)),
+              child: Column(
+                children: [
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (String value) {
+                      setState(() {
+                        _billAmount = double.parse(value);
+                        _amountPerPerson = _billAmount / _peopleCount;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.monetization_on_outlined),
+                      labelText: 'Bill Amount',
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'People',
+                        style: textStyle.copyWith(
+                            color: Colors.black87, fontSize: 20),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: decrementPeople,
+                              icon: const Icon(Icons.remove)),
+                          Text(
+                            '$_peopleCount',
+                            style: textStyle.copyWith(
+                                color: Colors.black87, fontSize: 20),
+                          ),
+                          IconButton(
+                              onPressed: incrementPeople,
+                              icon: const Icon(Icons.add)),
+                        ],
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
