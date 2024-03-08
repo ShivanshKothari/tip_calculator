@@ -7,10 +7,12 @@ class TipCounter extends StatelessWidget {
     required double tipAmount,
     required double tipFactor,
     required this.onChanged,
+    required this.theme,
   })  : _tipAmount = tipAmount,
         _tipFactor = tipFactor;
 
   final TextStyle textStyle;
+  final ThemeData theme;
   final double _tipAmount;
   final double _tipFactor;
   final ValueChanged<double> onChanged;
@@ -24,11 +26,13 @@ class TipCounter extends StatelessWidget {
           children: [
             Text(
               'Tip',
-              style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+              style: textStyle.copyWith(
+                  color: theme.colorScheme.onBackground, fontSize: 20),
             ),
             Text(
               '₹ $_tipAmount',
-              style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+              style: textStyle.copyWith(
+                  color: theme.colorScheme.onBackground, fontSize: 20),
             ),
           ],
         ),
@@ -37,7 +41,7 @@ class TipCounter extends StatelessWidget {
             Text('${(_tipFactor * 100).round()}%',
                 style: textStyle.copyWith(
                     fontWeight: FontWeight.normal,
-                    color: Colors.black87,
+                    color: theme.colorScheme.onBackground,
                     fontSize: 20)),
             Slider(
                 value: _tipFactor,

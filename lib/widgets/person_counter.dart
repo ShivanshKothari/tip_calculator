@@ -7,9 +7,11 @@ class PersonCounter extends StatelessWidget {
     required int peopleCount,
     required this.onIncrement,
     required this.onDecrement,
+    required this.theme,
   }) : _peopleCount = peopleCount;
 
   final TextStyle textStyle;
+  final ThemeData theme;
   final int _peopleCount;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
@@ -21,14 +23,16 @@ class PersonCounter extends StatelessWidget {
       children: [
         Text(
           'People',
-          style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+          style: textStyle.copyWith(
+              color: theme.colorScheme.onBackground, fontSize: 20),
         ),
         Row(
           children: [
             IconButton(onPressed: onDecrement, icon: const Icon(Icons.remove)),
             Text(
               '$_peopleCount',
-              style: textStyle.copyWith(color: Colors.black87, fontSize: 20),
+              style: textStyle.copyWith(
+                  color: theme.colorScheme.onBackground, fontSize: 20),
             ),
             IconButton(onPressed: onIncrement, icon: const Icon(Icons.add)),
           ],

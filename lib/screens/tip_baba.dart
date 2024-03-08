@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tip_calculator/screens/providers/tip_calculator_model.dart';
+import 'package:tip_calculator/providers/theme_provider.dart';
+import 'package:tip_calculator/providers/tip_calculator_model.dart';
 import 'package:tip_calculator/widgets/bill_amount_field.dart';
 import 'package:tip_calculator/widgets/per_person_amount_display.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
@@ -16,6 +17,7 @@ class TipBaba extends StatefulWidget {
 class _TipBabaState extends State<TipBaba> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     final stateModel = Provider.of<TipCalculatorModel>(context);
     var theme = Theme.of(context);
     final textStyle = theme.textTheme.titleMedium!.copyWith(
@@ -25,12 +27,14 @@ class _TipBabaState extends State<TipBaba> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Tip Baba'),
-          ],
-        ),
+        title: const Text('Tip Baba'),
+        actions: [
+          IconButton(
+              onPressed: () => themeProvider.toggleTheme(),
+              icon: !themeProvider.isDarkMode
+                  ? Icon(Icons.sunny)
+                  : Icon(Icons.nightlight_round))
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -62,6 +66,7 @@ class _TipBabaState extends State<TipBaba> {
                   PersonCounter(
                     textStyle: textStyle,
                     peopleCount: stateModel.peopleCount,
+                    theme: theme,
                     onIncrement: () => stateModel
                         .updatePeopleCount(stateModel.peopleCount + 1),
                     onDecrement: () => stateModel
@@ -71,6 +76,7 @@ class _TipBabaState extends State<TipBaba> {
                     textStyle: textStyle,
                     tipAmount: stateModel.tipAmount,
                     tipFactor: stateModel.tipFactor,
+                    theme: theme,
                     onChanged: (double value) =>
                         stateModel.updateTipFactor(value),
                   ),
