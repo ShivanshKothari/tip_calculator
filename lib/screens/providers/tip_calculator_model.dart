@@ -29,6 +29,7 @@ class TipCalculatorModel with ChangeNotifier {
   void textAreaInputChange(String value) {
     value = value == "" ? "0" : value;
     _billAmount = double.parse(value);
+    _tipAmount = _billAmount * _tipFactor;
     _calculateAmountPerPerson();
     notifyListeners();
   }
