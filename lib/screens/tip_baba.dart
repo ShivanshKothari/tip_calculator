@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tip_calculator/screens/providers/tip_calculator_model.dart';
 import 'package:tip_calculator/widgets/bill_amount_field.dart';
 import 'package:tip_calculator/widgets/per_person_amount_display.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
@@ -12,37 +14,9 @@ class TipBaba extends StatefulWidget {
 }
 
 class _TipBabaState extends State<TipBaba> {
-  double _billAmount = 0;
-  double _tipAmount = 0;
-  double _tipFactor = 0;
-  int _peopleCount = 1;
-  double _amountPerPerson = 0;
-
-  void incrementPeople() {
-    setState(() {
-      _peopleCount++;
-      _amountPerPerson = _billAmount / _peopleCount + _tipAmount;
-    });
-  }
-
-  void decrementPeople() {
-    setState(() {
-      if (_peopleCount > 1) {
-        _peopleCount--;
-        _amountPerPerson = _billAmount / _peopleCount + _tipAmount;
-      }
-    });
-  }
-
-  textAreaInputChange(String value) {
-    setState(() {
-      _billAmount = double.parse(value);
-      _amountPerPerson = _billAmount / _peopleCount + _tipAmount;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final stateModel = Provider.of<TipCalculatorModel>(context);
     var theme = Theme.of(context);
     final textStyle = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -67,7 +41,7 @@ class _TipBabaState extends State<TipBaba> {
             child: PerPersonAmountDisplay(
                 theme: theme,
                 textStyle: textStyle,
-                amountPerPerson: _amountPerPerson),
+                amountPerPerson: stateModel.amountPerPerson),
           ),
           Padding(
             padding: const EdgeInsets.all(10),
@@ -82,26 +56,23 @@ class _TipBabaState extends State<TipBaba> {
               child: Column(
                 children: [
                   BillAmountField(
-                    textAreaInputChange: textAreaInputChange,
+                    textAreaInputChange: (String value) =>
+                        stateModel.textAreaInputChange(value),
                   ),
                   PersonCounter(
                     textStyle: textStyle,
-                    peopleCount: _peopleCount,
-                    onIncrement: incrementPeople,
-                    onDecrement: decrementPeople,
+                    peopleCount: stateModel.peopleCount,
+                    onIncrement: () => stateModel
+                        .updatePeopleCount(stateModel.peopleCount + 1),
+                    onDecrement: () => stateModel
+                        .updatePeopleCount(stateModel.peopleCount - 1),
                   ),
                   TipCounter(
                     textStyle: textStyle,
-                    tipAmount: _tipAmount,
-                    tipFactor: _tipFactor,
-                    onChanged: (double value) {
-                      setState(() {
-                        _tipFactor = value;
-                        _tipAmount = _billAmount * _tipFactor;
-                        _amountPerPerson =
-                            _billAmount / _peopleCount + _tipAmount;
-                      });
-                    },
+                    tipAmount: stateModel.tipAmount,
+                    tipFactor: stateModel.tipFactor,
+                    onChanged: (double value) =>
+                        stateModel.updateTipFactor(value),
                   ),
                 ],
               ),

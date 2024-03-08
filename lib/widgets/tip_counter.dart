@@ -41,7 +41,7 @@ class TipCounter extends StatelessWidget {
                     fontSize: 20)),
             Slider(
                 value: _tipFactor,
-                divisions: 5,
+                divisions: 10,
                 min: 0,
                 max: 0.5,
                 onChanged: onChanged),
