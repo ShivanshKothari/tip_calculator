@@ -1,16 +1,36 @@
-# tip_calculator
+## Tip Baba - Split Bills with Ease!
 
-A new Flutter project.
+**Tip Baba** is a Flutter app that helps you effortlessly split bills among friends, colleagues, or any group. It goes beyond simple splitting by allowing you to add individual tips for each person, ensuring everyone contributes fairly.
 
-## Getting Started
+**Features:**
 
-This project is a starting point for a Flutter application.
+* Split bills equally among any number of people.
+* Add individual tips for each person in the group.
+* Calculate the final amount each person owes.
+* Simple and user-friendly interface.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Getting Started:**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Clone the repository:** Use `git clone https://github.com/ShivanshKothari/tip_calculator.git` to clone the repository locally.
+2. **Install dependencies:** Run `flutter pub get` in your terminal to install the required packages.
+3. **Run the app:** Use `flutter run` to start the app on your device or emulator.
+
+**Contributing:**
+
+We welcome contributions from the Flutter community! If you have any ideas for improvement, bug fixes, or new features, feel free to fork the repository, make your changes, and submit a pull request.
+
+**Here are some areas you can contribute to:**
+
+* Add support for different currencies.
+* Implement advanced splitting options (e.g., percentage split).
+* Enhance the UI design.
+* Write unit and integration tests.
+
+Please ensure your code adheres to the project's coding style and formatting guidelines (if any).
+
+**License:**
+
+This project is licensed under the MIT License: https://opensource.org/license/mit
+
+**Let's make splitting bills a breeze together!**
